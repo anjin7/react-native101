@@ -1,11 +1,7 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React from "react";
 
 function App() {
-  return (
-    <Router basename={process.env.PUBLIC_URL}>
-
-    </Router>
-  );
+  return <div></div>;
 }
 
 export default App;
