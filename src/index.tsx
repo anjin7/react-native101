@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import { createGlobalStyle } from "styled-components";
+import firebase from "./firbase";
+console.log(firebase)
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
