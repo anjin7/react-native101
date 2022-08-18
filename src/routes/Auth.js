@@ -20,13 +20,15 @@ function Auth() {
     <div>
       <form onSubmit={onSubmit}>
         <input
-          type="text"
+          name="email"
+          type="email"
           placeholder="Email"
           required
           value={email}
           onChange={onChange}
         />
         <input
+          name="password"
           type="password"
           placeholder="PassWord"
           required
