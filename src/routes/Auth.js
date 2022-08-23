@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { authService } from "..firbase";
 import {
   createUserWithEmailAndPassword,
   getAuth,
