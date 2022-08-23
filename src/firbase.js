@@ -5,6 +5,9 @@
 // import "firebase/compat/storage";
 // import "firebase/auth";
 
+
+
+import "firebase/compat/storage";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
