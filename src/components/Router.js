@@ -7,7 +7,7 @@ import {
 import Auth from "../routes/Auth";
 import Home from "../routes/Home";
 import Profile from "../routes/Profile";
-import Navigation from "./Navigation";
+import Navigation from "./Navigation.tsx";
 
 const AppRouter = ({ isLoggedIn }) => {
   return (
