@@ -5,25 +5,37 @@ import {
   addDoc,
   serverTimestamp,
   getDocs,
-  query
+  query,
+  onSnapshot,
+  orderBy,
 } from "firebase/firestore";
 
-function Home() {
+function Home({ userObj }) {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
-  const getNweets = async () => {
-    const q = query(collection(dbService, "nweets"));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      const nweetObj = {
-        ...doc.data(),
-        id: doc.id,
-      }
-      setNweets(prev => [nweetObj, ...prev]);
-    });
-  };
+  // const getNweets = async () => {
+  //   const q = query(collection(dbService, "nweets"));
+  //   const querySnapshot = await getDocs(q);
+  //   querySnapshot.forEach((doc) => {
+  //     const nweetObj = {
+  //       ...doc.data(),
+  //       id: doc.id,
+  //     }
+  //     setNweets(prev => [nweetObj, ...prev]);
+  //   });
+  // };
   useEffect(() => {
-    getNweets();
+    const q = query(
+      collection(dbService, "nweets"),
+      orderBy("createdAt", "desc")
+    );
+    onSnapshot(q, (snapshot) => {
+      const nweetArr = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setNweets(nweetArr);
+    });
   }, []);
   const onSubmit = async (event) => {
     event.preventDefault();
