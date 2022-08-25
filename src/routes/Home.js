@@ -4,11 +4,11 @@ import {
   collection,
   addDoc,
   serverTimestamp,
-  getDocs,
   query,
   onSnapshot,
   orderBy,
 } from "firebase/firestore";
+import Nweet from "../components/Nweet";
 
 function Home({ userObj }) {
   const [nweet, setNweet] = useState("");
@@ -68,9 +68,11 @@ function Home({ userObj }) {
       </form>
       <div>
         {nweets.map((nweet) => (
-          <div key={nweet.id}>
-            <h4>{nweet.text}</h4>
-          </div>
+          <Nweet
+            key={nweet.id}
+            nweetObj={nweet}
+            isOwner={nweet.creatorId === userObj.uid}
+          />
         ))}
       </div>
     </div>
