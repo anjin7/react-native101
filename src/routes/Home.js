@@ -41,8 +41,9 @@ function Home({ userObj }) {
     event.preventDefault();
     try {
       const docRef = await addDoc(collection(dbService, "nweets"), {
-        nweet,
+        text: nweet,
         createdAt: serverTimestamp(),
+        creatorId: userObj.uid,
       });
       console.log("Document written with ID: ", docRef.id);
       } catch (error) {
