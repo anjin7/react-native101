@@ -13,17 +13,6 @@ import Nweet from "../components/Nweet";
 function Home({ userObj }) {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
-  // const getNweets = async () => {
-  //   const q = query(collection(dbService, "nweets"));
-  //   const querySnapshot = await getDocs(q);
-  //   querySnapshot.forEach((doc) => {
-  //     const nweetObj = {
-  //       ...doc.data(),
-  //       id: doc.id,
-  //     }
-  //     setNweets(prev => [nweetObj, ...prev]);
-  //   });
-  // };
   useEffect(() => {
     const q = query(
       collection(dbService, "nweets"),
