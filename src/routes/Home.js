@@ -26,6 +26,7 @@ function Home({ userObj }) {
       setNweets(nweetArr);
     });
   }, []);
+
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -43,6 +44,18 @@ function Home({ userObj }) {
   const onChange = ({ target: { value } }) => {
     setNweet(value);
   };
+
+  const onFileChange = (event) => {
+    const {
+      target: { files },
+    } = event;
+    const theFile = files[0];
+    const reader = new FileReader();
+    reader.onloadend = (finishedEvent) => {
+      console.log(finishedEvent);
+    };
+    reader.readAsDataURL(theFile);
+  };
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -53,6 +66,7 @@ function Home({ userObj }) {
           placeholder="What's on your mind?"
           maxLength={120}
         />
+        <input type="file" accept="image/*" onChange={onFileChange} />
         <input type="submit" value="Nweet" />
       </form>
       <div>
