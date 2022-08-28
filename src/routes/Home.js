@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { dbService } from '../firbase';
+import { dbService, storageService } from '../firbase';
 import {
   collection,
   addDoc,
@@ -8,12 +8,15 @@ import {
   onSnapshot,
   orderBy,
 } from "firebase/firestore";
+import { ref, uploadString } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
 import Nweet from "../components/Nweet";
 
 function Home({ userObj }) {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
   const [attachment, setAttachment] = useState();
+
   useEffect(() => {
     const q = query(
       collection(dbService, "nweets"),
@@ -30,6 +33,9 @@ function Home({ userObj }) {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+    const response = await uploadString(fileRef, attachment, "data_url");
+    console.log(response);
     try {
       const docRef = await addDoc(collection(dbService, "nweets"), {
         text: nweet,
@@ -64,7 +70,7 @@ function Home({ userObj }) {
     fileInput.current.value = null;
   };
   const fileInput = useRef();
-
+  
   return (
     <div>
       <form onSubmit={onSubmit}>
