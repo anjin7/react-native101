@@ -8,14 +8,15 @@ import {
   onSnapshot,
   orderBy,
 } from "firebase/firestore";
-import { ref, uploadString } from "firebase/storage";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import Nweet from "../components/Nweet";
+
 
 function Home({ userObj }) {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
-  const [attachment, setAttachment] = useState();
+  const [attachment, setAttachment] = useState("");
 
   useEffect(() => {
     const q = query(
@@ -33,21 +34,23 @@ function Home({ userObj }) {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
-    const response = await uploadString(fileRef, attachment, "data_url");
-    console.log(response);
-    try {
-      const docRef = await addDoc(collection(dbService, "nweets"), {
-        text: nweet,
-        createdAt: serverTimestamp(),
-        creatorId: userObj.uid,
-      });
-      console.log("Document written with ID: ", docRef.id);
-      } catch (error) {
-        console.error("Error adding document: ", error);
-      }
+    let attachmentUrl = "";
+    if (attachment !== "") {
+      const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+      const response = await uploadString(attachmentRef, attachment, "data_url");
+      attachmentUrl = await getDownloadURL(response.ref);
+    }
+    const nweetObj = {
+      text: nweet,
+      createdAt: serverTimestamp(),
+      creatorId: userObj.uid,
+      attachmentUrl,
+    };
+    await addDoc(collection(dbService, "nweets"), nweetObj);
     setNweet("");
+    setAttachment("");
   };
+
   const onChange = ({ target: { value } }) => {
     setNweet(value);
   };
@@ -66,8 +69,9 @@ function Home({ userObj }) {
     };
     reader.readAsDataURL(theFile);
   };
+  
   const onClearAttachment = () => {
-    fileInput.current.value = null;
+    setAttachment("")
   };
   const fileInput = useRef();
   
