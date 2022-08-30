@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { dbService, storageService } from "../firbase";
-import { deleteDoc, doc, updateDoc, } from 'firebase/firestore';
-import { deleteObject, ref } from "firebase/storage";
+import { deleteDoc, doc, updateDoc, serverTimestamp, } from 'firebase/firestore';
+import { deleteObject, ref, uploadString, getDownloadURL } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
 
-const Nweet = ({ nweetObj, isOwner }) => {
+const Nweet = ({ nweetObj, isOwner, userObj }) => {
   const [editing, setEditing] = useState(false);
   const [newNweet, setNewNweet] = useState(nweetObj.text);
-  // const [imgAttachment, setImgAttachment] = useState(nweetObj.attachmentUrl);
+  const [newAttachment, setNewAttachment] = useState(nweetObj.attachmentUrl);
 
   const NweetTextRef = doc(dbService, "nweets", `${nweetObj.id}`);
   const desertRef = ref(storageService, nweetObj.attachmentUrl);
@@ -29,8 +30,22 @@ const Nweet = ({ nweetObj, isOwner }) => {
   
   const onSubmit = async (event) => {
     event.preventDefault();
+    let newAttachmentUrl = "";
+    if (newAttachmentUrl !== "") {
+      const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+      const response = await uploadString(attachmentRef, newAttachment, "data_url");
+      newAttachmentUrl = await getDownloadURL(response.ref);
+    }
+    const nweetObj = {
+      text: newNweet,
+      createdAt: serverTimestamp(),
+      newAttachmentUrl,
+    };
     await updateDoc(NweetTextRef, {
       text: newNweet,
+    });
+    await updateDoc(desertRef, {
+      file: newAttachment,
     });
     setEditing(false);
   };
@@ -40,25 +55,26 @@ const Nweet = ({ nweetObj, isOwner }) => {
       target: { value },
     } = event;
     setNewNweet(value);
+    setNewAttachment(value);
   };
 
-  // const onImgChange = (event) => {
-  //   const {
-  //     target: { files },
-  //   } = event;
-  //   const theFile = files[0];
-  //   const reader = new FileReader();
-  //   reader.onloadend = (finishedEvent) => {
-  //     const {
-  //       currentTarget: { result },
-  //     } = finishedEvent;
-  //     setImgAttachment(result);
-  //   };
-  //   if (theFile) {
-  //   reader.readAsDataURL(theFile);
-  //   }
-  // };
-  // const fileInput = useRef();
+  const onFileChange = (event) => {
+    const {
+      target: { files },
+    } = event;
+    const theFile = files[0];
+    const reader = new FileReader();
+    reader.onloadend = (finishedEvent) => {
+      const {
+        currentTarget: { result },
+      } = finishedEvent;
+      setNewAttachment(result);
+    };
+    if (theFile) {
+      reader.readAsDataURL(theFile);
+    }
+  };
+  const fileInput = useRef();
   return (
     <div>
       {editing ? (
@@ -71,19 +87,13 @@ const Nweet = ({ nweetObj, isOwner }) => {
               required
               onChange={onChange}
             />
-            {/* <input
-              type="file"
-              accept="image/*"
-              onChange={onImgChange}
-              value={imgAttachment}
-              ref={fileInput}
-            /> */}
+            <input type="file" accept="image/*" onChange={onFileChange} ref={fileInput} />
             <input type="submit" value="Update Nweet" />
-            {/* {imgAttachment && (
+            {newAttachment && (
               <div>
-                <img src={imgAttachment} width="100px" height="100px" alt="img" />
+                <img src={newAttachment} width="100px" height="100px" alt="img" />
               </div>
-            )} */}
+            )}
           </form>
           <button onClick={toggleEditing}>Cancel</button>
         </>
