@@ -6,8 +6,11 @@ import { deleteObject, ref } from "firebase/storage";
 const Nweet = ({ nweetObj, isOwner }) => {
   const [editing, setEditing] = useState(false);
   const [newNweet, setNewNweet] = useState(nweetObj.text);
+  // const [imgAttachment, setImgAttachment] = useState(nweetObj.attachmentUrl);
+
   const NweetTextRef = doc(dbService, "nweets", `${nweetObj.id}`);
   const desertRef = ref(storageService, nweetObj.attachmentUrl);
+
   const onDeleteClick = async () => {
     const ok = window.confirm("Are you sure you want to delete this nweet?");
     if (ok) {
@@ -20,9 +23,6 @@ const Nweet = ({ nweetObj, isOwner }) => {
       } catch (error) {
         window.alert("Fail to Delete");
       }
-    }
-    if(nweetObj.attachmentUrl){
-      await storageService.refFromURL(nweetObj.attachmentUrl).delete();
     }
   };
   const toggleEditing = () => setEditing((prev) => !prev);
@@ -41,6 +41,24 @@ const Nweet = ({ nweetObj, isOwner }) => {
     } = event;
     setNewNweet(value);
   };
+
+  // const onImgChange = (event) => {
+  //   const {
+  //     target: { files },
+  //   } = event;
+  //   const theFile = files[0];
+  //   const reader = new FileReader();
+  //   reader.onloadend = (finishedEvent) => {
+  //     const {
+  //       currentTarget: { result },
+  //     } = finishedEvent;
+  //     setImgAttachment(result);
+  //   };
+  //   if (theFile) {
+  //   reader.readAsDataURL(theFile);
+  //   }
+  // };
+  // const fileInput = useRef();
   return (
     <div>
       {editing ? (
@@ -53,7 +71,19 @@ const Nweet = ({ nweetObj, isOwner }) => {
               required
               onChange={onChange}
             />
+            {/* <input
+              type="file"
+              accept="image/*"
+              onChange={onImgChange}
+              value={imgAttachment}
+              ref={fileInput}
+            /> */}
             <input type="submit" value="Update Nweet" />
+            {/* {imgAttachment && (
+              <div>
+                <img src={imgAttachment} width="100px" height="100px" alt="img" />
+              </div>
+            )} */}
           </form>
           <button onClick={toggleEditing}>Cancel</button>
         </>
@@ -61,7 +91,7 @@ const Nweet = ({ nweetObj, isOwner }) => {
         <>
           <h4>{nweetObj.text}</h4>
             {nweetObj.attachmentUrl && (
-          <img src={nweetObj.attachmentUrl} width="50px" height="50px" alt="img" />
+          <img src={nweetObj.attachmentUrl} width="100px" height="100px" alt="img" />
           )}
           {isOwner && (
             <>
