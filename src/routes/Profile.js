@@ -1,16 +1,34 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { dbService, storageService } from '../firbase';
 import { getAuth, updateProfile } from "firebase/auth";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import { addDoc, collection, onSnapshot, query, } from "firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
 
 function Profile({ userObj }) {
   const history = useHistory();
+  const [profile, setProfile] = useState([])
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
-  const [profileImg, setProfileImg] = useState()
+  const [profileImg, setProfileImg] = useState();
   const auth = getAuth();
   const onLogOutClick = () => {
     auth.signOut();
     history.push("/");
   };
+
+    useEffect(() => {
+    const q = query(
+      collection(dbService, "profile"),
+    );
+    onSnapshot(q, (snapshot) => {
+      const profileArr = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setProfile(profileArr);
+    });
+  }, []);
 
   const onChange = (event) => {
     const {
@@ -26,6 +44,19 @@ function Profile({ userObj }) {
         photoURL: profileImg,
       });
     }
+    let attachmentUrl = "";
+    if (profileImg !== "") {
+      const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+      const response = await uploadString(attachmentRef, profileImg, "data_url");
+      attachmentUrl = await getDownloadURL(response.ref);
+    }
+    const profileObj = {
+      text: newDisplayName,
+      attachmentUrl,
+    };
+    await addDoc(collection(dbService, "profile"), profileObj);
+    
+    
   };
     const onFileChange = (event) => {
     const {
