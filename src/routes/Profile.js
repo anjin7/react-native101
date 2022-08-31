@@ -1,11 +1,11 @@
-import React, { useState, } from "react";
+import React, { useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { getAuth, updateProfile } from "firebase/auth";
 
 function Profile({ userObj }) {
   const history = useHistory();
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
-  const [newPhoto, setNewPhoto] = useState()
+  const [profileImg, setProfileImg] = useState()
   const auth = getAuth();
   const onLogOutClick = () => {
     auth.signOut();
@@ -23,7 +23,7 @@ function Profile({ userObj }) {
     if (userObj.displayName !== newDisplayName) {
       await updateProfile(userObj, {
         displayName: newDisplayName,
-        photoURL: newPhoto,
+        photoURL: profileImg,
       });
     }
   };
@@ -37,12 +37,16 @@ function Profile({ userObj }) {
       const {
         currentTarget: { result },
       } = finishedEvent;
-      setNewPhoto(result);
+      setProfileImg(result);
     };
     if (theFile) {
       reader.readAsDataURL(theFile);
     }
   };
+  const onClearAttachment = () => {
+    setProfileImg("")
+  };
+  const fileInput = useRef();
 
   return (
     <>
@@ -55,10 +59,9 @@ function Profile({ userObj }) {
         />
         <input type="file" accept="image/*" onChange={onFileChange} ref={fileInput} />
         <input type="submit" value="Update Profile" />
-        
-        {attachment && (
+        {profileImg && (
           <div>
-            <img src={attachment} width="100px" height="100px" alt="img" />
+            <img src={profileImg} width="100px" height="100px" alt="img" />
             <button onClick={onClearAttachment}>Clear</button>
           </div>
         )}
