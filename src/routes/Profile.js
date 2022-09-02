@@ -16,6 +16,7 @@ function Profile({ refreshUser, userObj }) {
     auth.signOut();
     history.push("/");
   };
+
     useEffect(() => {
     const q = query(
       collection(dbService, "profile"),
@@ -28,7 +29,6 @@ function Profile({ refreshUser, userObj }) {
       setProfile(profileArr);
     });
   }, []);
-
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -77,7 +77,7 @@ function Profile({ refreshUser, userObj }) {
     setProfileImg("")
   };
   const fileInput = useRef();
-
+  console.log(profile);
   return (
     <>
       <form onSubmit={onSubmit}>
