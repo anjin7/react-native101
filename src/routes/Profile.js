@@ -8,15 +8,14 @@ import { v4 as uuidv4 } from "uuid";
 
 function Profile({ userObj }) {
   const history = useHistory();
-  const [profile, setProfile] = useState([])
+  const [profile, setProfile] = useState([]);
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
-  const [profileImg, setProfileImg] = useState();
+  const [profileImg, setProfileImg] = useState("");
   const auth = getAuth();
   const onLogOutClick = () => {
     auth.signOut();
     history.push("/");
   };
-
     useEffect(() => {
     const q = query(
       collection(dbService, "profile"),
@@ -30,12 +29,7 @@ function Profile({ userObj }) {
     });
   }, []);
 
-  const onChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setNewDisplayName(value);
-  };
+
   const onSubmit = async (event) => {
     event.preventDefault();
     if (userObj.displayName !== newDisplayName) {
@@ -52,11 +46,18 @@ function Profile({ userObj }) {
     }
     const profileObj = {
       text: newDisplayName,
+      creatorId: userObj.uid,
       attachmentUrl,
     };
     await addDoc(collection(dbService, "profile"), profileObj);
-    
-    
+    setNewDisplayName("");
+    setProfileImg("");
+  };
+  const onChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setNewDisplayName(value);
   };
     const onFileChange = (event) => {
     const {
@@ -92,7 +93,7 @@ function Profile({ userObj }) {
         <input type="submit" value="Update Profile" />
         {profileImg && (
           <div>
-            <img src={profileImg} width="100px" height="100px" alt="img" />
+            <img src={profileImg} width="100px" height="100px" alt="profile-img" />
             <button onClick={onClearAttachment}>Clear</button>
           </div>
         )}
