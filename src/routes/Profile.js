@@ -6,7 +6,7 @@ import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { addDoc, collection, onSnapshot, query, } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 
-function Profile({ userObj }) {
+function Profile({ refreshUser, userObj }) {
   const history = useHistory();
   const [profile, setProfile] = useState([]);
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
@@ -32,12 +32,10 @@ function Profile({ userObj }) {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    if (userObj.displayName !== newDisplayName) {
-      await updateProfile(userObj, {
-        displayName: newDisplayName,
-        photoURL: profileImg,
-      });
-    }
+    if(userObj.displayName !== newDisplayName){
+      await updateProfile(getAuth.currentUser, { displayName: newDisplayName });
+      refreshUser();
+    };
     let attachmentUrl = "";
     if (profileImg !== "") {
       const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);

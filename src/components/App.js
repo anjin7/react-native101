@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AppRouter from "./Router";
 import { authService } from "../firbase";
+import { updateProfile } from "firebase/auth";
 
 function App() {
   const [init, setInit] = useState(false);
@@ -11,7 +12,7 @@ function App() {
         setUserObj({
           displayName: user.displayName,
           uid: user.uid,
-          updateProfile: (args) => updateProfile(user, { displayName: user.displayName }),
+          updateProfile: (user) => updateProfile(user, { displayName: user.displayName }),
         });
       } 
       setInit(true);
@@ -23,7 +24,7 @@ function App() {
     setUserObj({
       displayName: user.displayName,
       uid: user.uid,
-      updateProfile: (args) => updateProfile(user, { displayName: user.displayName }),
+      updateProfile: (user) => updateProfile(user, { displayName: user.displayName }),
     });
   };
   return (
