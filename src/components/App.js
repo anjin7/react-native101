@@ -14,6 +14,8 @@ function App() {
           uid: user.uid,
           updateProfile: (user) => updateProfile(user, { displayName: user.displayName }),
         });
+      }else {
+        setUserObj(null);
       } 
       setInit(true);
     });
