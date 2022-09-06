@@ -1,16 +1,16 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { dbService, storageService } from '../firbase';
+import { dbService } from '../firbase';
 import { getAuth, updateProfile } from "firebase/auth";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
+// import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { addDoc, collection, onSnapshot, query, } from "firebase/firestore";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 
 function Profile({ refreshUser, userObj }) {
   const history = useHistory();
   const [profile, setProfile] = useState([]);
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
-  const [profileImg, setProfileImg] = useState("");
+  // const [profileImg, setProfileImg] = useState("");
   const auth = getAuth();
   const onLogOutClick = () => {
     auth.signOut();
@@ -33,23 +33,22 @@ function Profile({ refreshUser, userObj }) {
   const onSubmit = async (event) => {
     event.preventDefault();
     if(userObj.displayName !== newDisplayName){
-      await updateProfile(getAuth.currentUser, { displayName: newDisplayName });
+      await updateProfile(auth.currentUser, { displayName: newDisplayName });
       refreshUser();
     };
-    let attachmentUrl = "";
-    if (profileImg !== "") {
-      const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
-      const response = await uploadString(attachmentRef, profileImg, "data_url");
-      attachmentUrl = await getDownloadURL(response.ref);
-    }
+    // let attachmentUrl = "";
+    // if (profileImg !== "") {
+    //   const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+    //   const response = await uploadString(attachmentRef, profileImg, "data_url");
+    //   attachmentUrl = await getDownloadURL(response.ref);
+    // }
     const profileObj = {
       text: newDisplayName,
       creatorId: userObj.uid,
-      attachmentUrl,
     };
     await addDoc(collection(dbService, "profile"), profileObj);
-    setNewDisplayName("");
-    setProfileImg("");
+    setNewDisplayName(newDisplayName);
+    // setProfileImg("");
   };
   const onChange = (event) => {
     const {
@@ -57,26 +56,26 @@ function Profile({ refreshUser, userObj }) {
     } = event;
     setNewDisplayName(value);
   };
-    const onFileChange = (event) => {
-    const {
-      target: { files },
-    } = event;
-    const theFile = files[0];
-    const reader = new FileReader();
-    reader.onloadend = (finishedEvent) => {
-      const {
-        currentTarget: { result },
-      } = finishedEvent;
-      setProfileImg(result);
-    };
-    if (theFile) {
-      reader.readAsDataURL(theFile);
-    }
-  };
-  const onClearAttachment = () => {
-    setProfileImg("")
-  };
-  const fileInput = useRef();
+  //   const onFileChange = (event) => {
+  //   const {
+  //     target: { files },
+  //   } = event;
+  //   const theFile = files[0];
+  //   const reader = new FileReader();
+  //   reader.onloadend = (finishedEvent) => {
+  //     const {
+  //       currentTarget: { result },
+  //     } = finishedEvent;
+  //     setProfileImg(result);
+  //   };
+  //   if (theFile) {
+  //     reader.readAsDataURL(theFile);
+  //   }
+  // };
+  // const onClearAttachment = () => {
+  //   setProfileImg("")
+  // };
+  // const fileInput = useRef();
   console.log(profile);
   return (
     <>
@@ -87,14 +86,14 @@ function Profile({ refreshUser, userObj }) {
           placeholder="Display name"
           value={newDisplayName}
         />
-        <input type="file" accept="image/*" onChange={onFileChange} ref={fileInput} />
+        {/* <input type="file" accept="image/*" onChange={onFileChange} ref={fileInput} /> */}
         <input type="submit" value="Update Profile" />
-        {profileImg && (
+        {/* {profileImg && (
           <div>
             <img src={profileImg} width="100px" height="100px" alt="profile-img" />
             <button onClick={onClearAttachment}>Clear</button>
           </div>
-        )}
+        )} */}
       </form>
       <button onClick={onLogOutClick}>Log Out</button>
     </>
