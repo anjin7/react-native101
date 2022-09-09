@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { dbService } from '../firbase';
 import { getAuth, updateProfile } from "firebase/auth";
 // import { ref, uploadString, getDownloadURL } from "firebase/storage";
-import { addDoc, collection, onSnapshot, query, } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, query, doc, updateDoc, } from "firebase/firestore";
 // import { v4 as uuidv4 } from "uuid";
 
 function Profile({ refreshUser, userObj }) {
@@ -16,6 +16,7 @@ function Profile({ refreshUser, userObj }) {
     auth.signOut();
     history.push("/");
   };
+  const DisplayNameRef = doc(dbService,"profile", `${userObj.displayName}`)
 
     useEffect(() => {
     const q = query(
@@ -46,7 +47,10 @@ function Profile({ refreshUser, userObj }) {
       text: newDisplayName,
       creatorId: userObj.uid,
     };
-    await addDoc(collection(dbService, "profile"), profileObj);
+    // await addDoc(collection(dbService, "profile"), profileObj);
+    await updateDoc(collection(dbService,"profile"), {
+      text: newDisplayName,
+    });
     setNewDisplayName(newDisplayName);
     // setProfileImg("");
   };
@@ -85,6 +89,7 @@ function Profile({ refreshUser, userObj }) {
           type="text"
           placeholder="Display name"
           value={newDisplayName}
+          required
         />
         {/* <input type="file" accept="image/*" onChange={onFileChange} ref={fileInput} /> */}
         <input type="submit" value="Update Profile" />
