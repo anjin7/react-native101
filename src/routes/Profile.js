@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { dbService } from '../firbase';
 import { getAuth, updateProfile } from "firebase/auth";
 // import { ref, uploadString, getDownloadURL } from "firebase/storage";
-import { addDoc, collection, onSnapshot, query, doc, updateDoc, } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, query, doc, updateDoc, serverTimestamp, } from "firebase/firestore";
 // import { v4 as uuidv4 } from "uuid";
 
 function Profile({ refreshUser, userObj }) {
@@ -46,8 +46,9 @@ function Profile({ refreshUser, userObj }) {
     const profileObj = {
       text: newDisplayName,
       creatorId: userObj.uid,
+      createdAt: serverTimestamp(),
     };
-    // await addDoc(collection(dbService, "profile"), profileObj);
+    await addDoc(collection(dbService, "profile"), profileObj);
     await updateDoc(collection(dbService,"profile"), {
       text: newDisplayName,
     });
