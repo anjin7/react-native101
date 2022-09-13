@@ -83,17 +83,26 @@ function Profile({ refreshUser, userObj }) {
   // const fileInput = useRef();
   console.log(profile);
   return (
-    <>
-      <form onSubmit={onSubmit}>
+    <div className="container">
+      <form onSubmit={onSubmit} className="profileForm">
         <input
           onChange={onChange}
           type="text"
+          autoFocus
           placeholder="Display name"
           value={newDisplayName}
           required
+          className="formInput"
         />
         {/* <input type="file" accept="image/*" onChange={onFileChange} ref={fileInput} /> */}
-        <input type="submit" value="Update Profile" />
+        <input
+          type="submit"
+          value="Update Profile"
+          className="formBtn"
+          style={{
+            marginTop: 10,
+          }}
+        />
         {/* {profileImg && (
           <div>
             <img src={profileImg} width="100px" height="100px" alt="profile-img" />
@@ -101,8 +110,10 @@ function Profile({ refreshUser, userObj }) {
           </div>
         )} */}
       </form>
-      <button onClick={onLogOutClick}>Log Out</button>
-    </>
+      <span className="formBtn cancelBtn logOut" onClick={onLogOutClick}>
+        Log Out
+      </span>
+    </div>
   );
 }
 

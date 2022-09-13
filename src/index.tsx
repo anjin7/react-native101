@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 import App from "./components/App.js";
 import { createGlobalStyle } from "styled-components";
 import firebase from "./firbase";
+import "./styles.css";
+
 console.log(firebase);
 
 const GlobalStyle = createGlobalStyle`
