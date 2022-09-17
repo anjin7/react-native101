@@ -8,7 +8,7 @@ import "./styles.css";
 console.log(firebase);
 
 const GlobalStyle = createGlobalStyle`
-html, body, div, span, applet, object, iframe,
+/* html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
@@ -27,14 +27,14 @@ time, mark, audio, video {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
-}
+} */
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
+/* article, aside, details, figcaption, figure,
 footer, header, hgroup, main, menu, nav, section {
   display: block;
-}
+} */
 /* HTML5 hidden-attribute fix for newer browsers */
-*[hidden] {
+/* *[hidden] {
     display: none;
 }
 body {
@@ -57,7 +57,7 @@ table {
 }
 * {
   box-sizing: border-box;
-}
+} */
 /* body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
@@ -65,10 +65,10 @@ table {
   line-height: 1.2;
   background-color: whitesmoke;
 } */
-a {
+/* a {
   text-decoration:none;
   color:inherit;
-}
+} */
 `;
 
 ReactDOM.render(
