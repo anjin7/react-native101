@@ -6,7 +6,15 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import AuthForm from '../components/AuthForm';
+import styled from 'styled-components';
 
+const Container = styled.div`
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* border: 1px solid red; */
+`;
 
 function Auth() {
   const onSocialClick = async (event) => {
@@ -24,7 +32,7 @@ function Auth() {
     console.log(data);
   };
   return (
-    <div>
+    <Container>
       <AuthForm />
       <div>
         <button onClick={onSocialClick} name="google">
@@ -34,7 +42,7 @@ function Auth() {
           Continue with Github
         </button>
       </div>
-    </div>
+    </Container>
   )
 }
 

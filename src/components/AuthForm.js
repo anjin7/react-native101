@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 
+
 const inputStyles = {};
 
 function AuthForm() {

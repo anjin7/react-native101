@@ -2,6 +2,15 @@ import React, { useState, useEffect } from "react";
 import AppRouter from "./Router";
 import { authService } from "../firbase";
 import { updateProfile } from "firebase/auth";
+import styled from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  /* border: 1px solid blue; */
+`;
 
 function App() {
   const [init, setInit] = useState(false);
@@ -30,7 +39,7 @@ function App() {
     });
   };
   return (
-    <>
+    <Container>
       {init ? (
         <AppRouter
           refreshUser={refreshUser}
@@ -41,7 +50,7 @@ function App() {
         "Initializing..."
       )}
       <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
-    </>
+    </Container>
   );
 }
 
