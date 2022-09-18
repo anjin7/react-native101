@@ -15,7 +15,6 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 
 const Container = styled.div`
-
 `;
 
 function Auth() {

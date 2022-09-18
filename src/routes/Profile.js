@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { dbService } from '../firbase';
 import { getAuth, updateProfile } from "firebase/auth";
 // import { ref, uploadString, getDownloadURL } from "firebase/storage";
-import { addDoc, collection, onSnapshot, query, doc, updateDoc, serverTimestamp, } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, query,  updateDoc, serverTimestamp, } from "firebase/firestore";
 // import { v4 as uuidv4 } from "uuid";
 
 function Profile({ refreshUser, userObj }) {
@@ -16,7 +16,7 @@ function Profile({ refreshUser, userObj }) {
     auth.signOut();
     history.push("/");
   };
-  const DisplayNameRef = doc(dbService,"profile", `${userObj.displayName}`)
+  // const DisplayNameRef = doc(dbService,"profile", `${userObj.displayName}`)
 
     useEffect(() => {
     const q = query(
@@ -81,7 +81,7 @@ function Profile({ refreshUser, userObj }) {
   //   setProfileImg("")
   // };
   // const fileInput = useRef();
-  console.log(profile);
+  // console.log(profile);
   return (
     <div className="container">
       <form onSubmit={onSubmit} className="profileForm">
