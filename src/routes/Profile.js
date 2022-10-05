@@ -10,7 +10,6 @@ function Profile({ refreshUser, userObj }) {
   const history = useHistory();
   const [profile, setProfile] = useState([]);
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
-  // const [profileImg, setProfileImg] = useState("");
   const auth = getAuth();
   const onLogOutClick = () => {
     auth.signOut();
@@ -77,10 +76,7 @@ function Profile({ refreshUser, userObj }) {
   //     reader.readAsDataURL(theFile);
   //   }
   // };
-  // const onClearAttachment = () => {
-  //   setProfileImg("")
-  // };
-  // const fileInput = useRef();
+
   // console.log(profile);
   return (
     <div className="container">
@@ -94,7 +90,6 @@ function Profile({ refreshUser, userObj }) {
           required
           className="formInput"
         />
-        {/* <input type="file" accept="image/*" onChange={onFileChange} ref={fileInput} /> */}
         <input
           type="submit"
           value="Update Profile"
@@ -103,12 +98,6 @@ function Profile({ refreshUser, userObj }) {
             marginTop: 10,
           }}
         />
-        {/* {profileImg && (
-          <div>
-            <img src={profileImg} width="100px" height="100px" alt="profile-img" />
-            <button onClick={onClearAttachment}>Clear</button>
-          </div>
-        )} */}
       </form>
       <span className="formBtn cancelBtn logOut" onClick={onLogOutClick}>
         Log Out
