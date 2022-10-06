@@ -36,12 +36,7 @@ function Profile({ refreshUser, userObj }) {
       await updateProfile(auth.currentUser, { displayName: newDisplayName });
       refreshUser();
     };
-    // let attachmentUrl = "";
-    // if (profileImg !== "") {
-    //   const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
-    //   const response = await uploadString(attachmentRef, profileImg, "data_url");
-    //   attachmentUrl = await getDownloadURL(response.ref);
-    // }
+
     const profileObj = {
       text: newDisplayName,
       creatorId: userObj.uid,
@@ -52,7 +47,7 @@ function Profile({ refreshUser, userObj }) {
       text: newDisplayName,
     });
     setNewDisplayName(newDisplayName);
-    // setProfileImg("");
+
   };
   const onChange = (event) => {
     const {
@@ -60,22 +55,7 @@ function Profile({ refreshUser, userObj }) {
     } = event;
     setNewDisplayName(value);
   };
-  //   const onFileChange = (event) => {
-  //   const {
-  //     target: { files },
-  //   } = event;
-  //   const theFile = files[0];
-  //   const reader = new FileReader();
-  //   reader.onloadend = (finishedEvent) => {
-  //     const {
-  //       currentTarget: { result },
-  //     } = finishedEvent;
-  //     setProfileImg(result);
-  //   };
-  //   if (theFile) {
-  //     reader.readAsDataURL(theFile);
-  //   }
-  // };
+
 
   // console.log(profile);
   return (
