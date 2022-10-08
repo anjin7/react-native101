@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { dbService } from '../firbase';
 import { getAuth, updateProfile } from "firebase/auth";
-// import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { addDoc, collection, onSnapshot, query,  updateDoc, serverTimestamp, } from "firebase/firestore";
-// import { v4 as uuidv4 } from "uuid";
+
 
 function Profile({ refreshUser, userObj }) {
   const history = useHistory();
