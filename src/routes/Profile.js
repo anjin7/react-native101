@@ -2,19 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { dbService } from '../firbase';
 import { getAuth, updateProfile } from "firebase/auth";
-import { addDoc, collection, onSnapshot, query,  updateDoc, serverTimestamp, } from "firebase/firestore";
+import { addDoc, doc,collection, onSnapshot, query,  updateDoc, serverTimestamp, } from "firebase/firestore";
 
 
 function Profile({ refreshUser, userObj }) {
   const history = useHistory();
   const [profile, setProfile] = useState([]);
-  const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
+  const [newDisplayName, setNewDisplayName] = useState(userObj.id);
   const auth = getAuth();
   const onLogOutClick = () => {
     auth.signOut();
     history.push("/");
   };
-  // const DisplayNameRef = doc(dbService,"profile", `${userObj.displayName}`)
+  // const DisplayNameRef = doc(dbService, "profile", `${userObj.id}`)
 
     useEffect(() => {
     const q = query(
@@ -25,12 +25,12 @@ function Profile({ refreshUser, userObj }) {
         id: doc.id,
         ...doc.data(),
       }));
-      setProfile(profileArr);
+      setNewDisplayName(profileArr);
     });
   }, []);
 
   const onSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault();    
     if(userObj.displayName !== newDisplayName){
       await updateProfile(auth.currentUser, { displayName: newDisplayName });
       refreshUser();
@@ -41,8 +41,9 @@ function Profile({ refreshUser, userObj }) {
       creatorId: userObj.uid,
       createdAt: serverTimestamp(),
     };
-    await addDoc(collection(dbService, "profile"), profileObj);
-    await updateDoc(collection(dbService,"profile"), {
+    // await addDoc(collection(dbService, "profile"), profileObj);
+    await updateDoc(collection(dbService, "profile"), profileObj);
+    await updateDoc(collection(dbService, "profile"), {
       text: newDisplayName,
     });
     setNewDisplayName(newDisplayName);
@@ -54,8 +55,6 @@ function Profile({ refreshUser, userObj }) {
     } = event;
     setNewDisplayName(value);
   };
-
-
   // console.log(profile);
   return (
     <div className="container">
