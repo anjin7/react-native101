@@ -41,7 +41,8 @@ function Profile({ refreshUser, userObj }) {
       creatorId: userObj.uid,
       createdAt: serverTimestamp(),
     };
-    // await addDoc(collection(dbService, "profile"), profileObj);
+
+    await addDoc(collection(dbService, "profile"), profileObj);
     await updateDoc(collection(dbService, "profile"), profileObj);
     await updateDoc(collection(dbService, "profile"), {
       text: newDisplayName,
