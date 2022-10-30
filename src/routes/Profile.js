@@ -7,7 +7,7 @@ import { addDoc, doc,collection, onSnapshot, query,  updateDoc, serverTimestamp,
 
 function Profile({ refreshUser, userObj }) {
   const history = useHistory();
-  const [profile, setProfile] = useState([]);
+  // const [profile, setProfile] = useState([]);
   const [newDisplayName, setNewDisplayName] = useState(userObj.id);
   const auth = getAuth();
   const onLogOutClick = () => {
@@ -35,26 +35,21 @@ function Profile({ refreshUser, userObj }) {
       await updateProfile(auth.currentUser, { displayName: newDisplayName });
       refreshUser();
     };
-
-    const profileObj = {
-      text: newDisplayName,
-      creatorId: userObj.uid,
-      createdAt: serverTimestamp(),
-    };
-
-    await addDoc(collection(dbService, "profile"), profileObj);
-    await updateDoc(collection(dbService, "profile"), profileObj);
-    await updateDoc(collection(dbService, "profile"), {
-      text: newDisplayName,
-    });
+    // const profileObj = {
+    //   text: newDisplayName,
+    //   creatorId: userObj.uid,
+    //   createdAt: serverTimestamp(),
+    // };
+    // await addDoc(collection(dbService, "profile"), profileObj);
+    // await updateDoc(collection(dbService, "profile"), profileObj);
+    // await updateDoc(collection(dbService, "profile"), {
+    //   text: newDisplayName,
+    // });
     setNewDisplayName(newDisplayName);
 
   };
-  const onChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setNewDisplayName(value);
+  const onChange = ({target:{value}}) => {
+    setNewDisplayName(value)
   };
   // console.log(profile);
   return (
