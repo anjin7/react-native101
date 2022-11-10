@@ -14,7 +14,7 @@ function Profile({ refreshUser, userObj }) {
     auth.signOut();
     history.push("/");
   };
-  // const DisplayNameRef = doc(dbService, "profile", `${userObj.id}`)
+  const DisplayNameRef = doc(dbService, "profile", `${userObj.id}`)
 
     useEffect(() => {
     const q = query(
