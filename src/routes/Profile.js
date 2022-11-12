@@ -35,16 +35,16 @@ function Profile({ refreshUser, userObj }) {
       await updateProfile(auth.currentUser, { displayName: newDisplayName });
       refreshUser();
     };
-    // const profileObj = {
-    //   text: newDisplayName,
-    //   creatorId: userObj.uid,
-    //   createdAt: serverTimestamp(),
-    // };
-    // await addDoc(collection(dbService, "profile"), profileObj);
+    const profileObj = {
+      text: newDisplayName,
+      creatorId: userObj.uid,
+      createdAt: serverTimestamp(),
+    };
+    await addDoc(collection(dbService, "profile"), profileObj);
     // await updateDoc(collection(dbService, "profile"), profileObj);
-    // await updateDoc(collection(dbService, "profile"), {
-    //   text: newDisplayName,
-    // });
+    await updateDoc(collection(dbService, "profile"), {
+      text: newDisplayName,
+    });
     setNewDisplayName(newDisplayName);
 
   };
